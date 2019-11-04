@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Enquiry Source</title>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/main.css}" type="text/css" rel="stylesheet" />
+    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#enq-source-form').validate({
+                rules: {
+                    name: {
+                        required: true,
+                    }
+                },
+                messages: {
+                    name: {
+                        required: " Source name is required",
+                    }
+                },
+                highlight: function(element) {
+                    $(element).parent().addClass("field-error");
+                },
+                unhighlight: function(element) {
+                    $(element).parent().removeClass("field-error");
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+    <div th:insert="menu"></div>
+
+    <div class="main">
+        <div th:insert="header"></div>
+
+        <form th:action="@{/save-enquiry-source}" th:object="${cmd}" method="POST" id="enq-source-form">
+            <table border="1" width="90%" align="center" cellpadding="5">
+                <tr>
+                    <td class="fheading" colspan="3">Enquiry Source</td>
+                </tr>
+                <tr>
+                    <td align="right">Enter Source</td>
+                    <td>
+                        <input type="text" th:field="*{name}" />
+                        <input type="hidden" th:field="*{enquirySourceId}" />
+                        <span class="txt_small"> (Source for Enquiry like Google Search)</span>
+                    </td>
+                    <td width="40%">
+                        <button>Save</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <br />
+        <table border="1" width="90%" align="center" cellpadding="5">
+            <tr>
+                <th>SR</th>
+                <th>ID</th>
+                <th>SOURCE</th>
+                <th>ACTION</th>
+            </tr>
+            <tr th:each="es,itr: ${enquirySourceList}">
+                <td th:text="${itr.count}">SR</td>
+                <td th:text="${es.enquirySourceId}">ID</td>
+                <td th:text="${es.name}">SOURCE</td>
+                <td> <a th:href="@{'/enquiry-source-edit/'+${es.enquirySourceId}}">Edit</a> | 
+                    <a th:href="@{'/enquiry-source-delete/'+${es.enquirySourceId}}">Delete</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>
